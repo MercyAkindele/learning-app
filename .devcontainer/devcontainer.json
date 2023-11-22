@@ -1,0 +1,16 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "Learning App",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"oderwat.indent-rainbow",
+				"DavidAnson.vscode-markdownlint",
+				"ms-azuretools.vscode-docker",
+				"esbenp.prettier-vscode",
+				"dsznajder.es7-react-js-snippets"
+			]
+		}
+	}
+}
