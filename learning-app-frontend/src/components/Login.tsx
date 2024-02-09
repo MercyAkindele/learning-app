@@ -11,38 +11,24 @@ import {
 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
-import { FormEvent, useState } from "react";
+import {  useState } from "react";
 import { useAuth} from "../firebase/auth"
 
 
 
+
 const Login = () => {
-  const {logIn} = useAuth();
+  const { logIn } = useAuth();
   const [emailAddress, setEmailAddress] = useState<string>("");
-  const [emailIsValid, setEmailIsValid] = useState<boolean>(true);
   const [password, setPassword] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log("in handle email change");
     let emailInput = e.target.value;
     setEmailAddress(emailInput);
-    // console.log(
-    //   "this is isValidEmail inside of the handler: ",
-    //   isValidEmail(emailInput)
-    // );
+  
   };
-  const isValidEmail = (anEmailAddress: string): boolean => {
-    // console.log("in isValidEmail");
-    const emailFormat: RegExp =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailFormat.test(anEmailAddress);
-  };
-  const handleBlur = () => {
-    console.log("the input email: ", emailAddress)
-    console.log("Email verification: ", isValidEmail(emailAddress))
-    setEmailIsValid(isValidEmail(emailAddress));
-  };
-  const handleSubmit = async (e:FormEvent<HTMLFormElement>) =>{
+ 
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     try{
       await logIn(emailAddress, password)
@@ -77,27 +63,17 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-          {!emailIsValid ? (
+          
             <TextField
               error
-              id="outlined-error-helper-text"
-              value={emailAddress}
-              helperText="Invalid email address."
-              onChange ={handleEmailChange}
-              onBlur ={handleBlur}
-            />
-          ) : (
-            <TextField
-              sx={{ marginTop: 2, marginBottom: 2 }}
-              autoFocus
+              id="email"
               type="email"
-              value={emailAddress}
-              label="Email Address"
+              label="Email"
+              autoComplete="email"
               required
-              onChange={handleEmailChange}
-              onBlur={handleBlur}
+              value={emailAddress}
+              onChange ={handleEmailChange}
             />
-          )}
           
           <TextField
             sx={{ marginTop: 2, marginBottom: 2 }}
@@ -107,7 +83,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value) }
           />
           <FormControlLabel
-            control={<Checkbox value="remember" />}
+            control={<Checkbox value="remember" id="remember-checkbox"/>}
             label="Remember me"
           />
           <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>
