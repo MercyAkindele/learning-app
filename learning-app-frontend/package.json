@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -16,11 +18,16 @@
     "@mui/material": "^5.14.17",
     "dotenv": "^16.3.1",
     "firebase": "^10.6.0",
+    "firebase-admin": "^12.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-jsx": "^1.0.0",
     "react-router-dom": "^6.17.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.1",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -30,7 +37,9 @@
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "jsdom": "^24.0.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
   }
 }

@@ -1,25 +1,15 @@
-import './App.css'
-import Navigation from './components/Navigation'
-import Login from './components/Login'
-import { Routes, Route } from 'react-router-dom'
-import Signup from './components/Signup'
-import { AuthUserProvider } from './firebase/auth'
+import "./App.css";
+import { AuthUserProvider } from "./firebase/auth";
+import AppRoutes from "./layout/AppRoutes";
 
 function App() {
-
   return (
-    <AuthUserProvider>
     <>
-    <Navigation/>
-    <Routes>
-      <Route path="/login" element={<Login/>} />
-      <Route path="/signup" element={<Signup/>} />
-      {/* <Route path="/signin" element={<SignIn/>}/> */}
-    </Routes>
-    
+      <AuthUserProvider>
+        <AppRoutes/>
+      </AuthUserProvider>
     </>
-    </AuthUserProvider>
-  )
+  );
 }
 
-export default App
+export default App;
