@@ -24,8 +24,15 @@ export async function create(subject:Subject) {
     )
     .andWhereRaw("LOWER(subject_name) = ?", [subject.sub.toLowerCase()])
   }
-  
+
   export async function getTheSubjects(id:string){
     return knex("subject")
     .select("subject_name").where({"user_id": id})
+  }
+
+  export async function retrieveSubId(id:string, subjectName:string){
+    return knex("subject")
+    .select("subject_id")
+    .where({user_id:id, subject_name:subjectName}).first()
+
   }
