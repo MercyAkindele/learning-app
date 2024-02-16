@@ -18,34 +18,20 @@ import PomodoroMode from "./PomodoroMode";
 import Navigation from "./Navigation";
 import { getSubjects } from "../utils/api";
 import {auth} from "../firebase/firebase"
+import { useAuth} from "../firebase/auth"
 
 type typeAlertType = "durationError" | "studyIncrementError"|"studyGreaterThanDuration";
 
-// async function getTheSubjects(){
-//   if(auth.currentUser){
-//     try{
-//       const userIdToken = await auth.currentUser.getIdToken()
-//       let whatWeGet = await getSubjects(userIdToken)
-//       console.log("this is what we get back from getSubjects, ",whatWeGet )
-//   }catch(error:any){
-//       console.log("this is the error message: ", error)
-//       if(error.message){
-//           setAlertType(error.message)
-//       }
-//       console.error(error)
-//       throw error;
-//   }
-//   }
-// }
-// getTheSubjects
+
 
 const PomodoroTimer = () => {
   type InitialInterval = {
     studyInt: number;
     breakInt: number;
   };
-  
+
   let audio = new Audio("src/assets/music/Background music DOWNLOAD (135).wav");
+
 
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>();
@@ -62,17 +48,31 @@ const PomodoroTimer = () => {
   const [initialIntervals, setInitialIntervals] = useState<InitialInterval | null>(null);
   const [alertType, setAlertType] = useState<typeAlertType|null>()
   const [subjectNames, setSubjectNames] = useState<string[]|[]>([])
+
   const title = "Pomodoro";
+
+  let {authUser} = useAuth();
+  const userId = authUser?.uid;
 
   type TheStudyType = "study"|"studyBreak"
 
+  // console.log('outside')
+  // console.log('outside auth', auth);
+  console.log("this is the selected subject", selectedSubject)
   useEffect(()=>{
-    console.log("inside an empty useEffwect")
-    const user = auth.currentUser;
+    // console.log("inside first useEffect")
+    // console.log("this is the current user after the first useEffect", auth.currentUser)
+
     const getListOfSubjects = async ()=>{
-      if(user){
+
+      console.log("this is authUser id inside of the useEffect", authUser?.uid)
+      // console.log('auth', auth);
+      // console.log('auth.currentUser', auth.currentUser);
+
+      if(auth.currentUser){
+
         try{
-          let userIdToken = await user?.getIdToken();
+          let userIdToken = await auth.currentUser?.getIdToken();
           console.log("this is the userIDtOKEN", userIdToken)
           let subjectNamesFromDataBase = await getSubjects(userIdToken)
           setSubjectNames(subjectNamesFromDataBase)
@@ -81,8 +81,9 @@ const PomodoroTimer = () => {
         }
       }
     }
+
     getListOfSubjects();
-  },[])
+  },[userId])
 
   useEffect(() => {
     if (timerRunning) {
@@ -176,14 +177,14 @@ const PomodoroTimer = () => {
         setTimerRunning(true);
       }
     }
-    
+
   };
 
   return (
     <>
       <Navigation title={title} />
       <Container sx={{ display: "flex", justifyContent: "center" }}>
-        
+
         {!start && (
           <Card
             sx={{
@@ -212,7 +213,7 @@ const PomodoroTimer = () => {
                 </Select>
               </FormControl>
 
-              <TextField
+              {/* <TextField
                 id="create-new-subject"
                 label="Create new study subject"
                 variant="outlined"
@@ -233,7 +234,7 @@ const PomodoroTimer = () => {
                     </MenuItem>
                   ))}
                 </Select>
-              </FormControl>
+              </FormControl> */}
               <Typography sx={{margin:"2%"}}>Total duration</Typography>
               <Paper
                 elevation={2}
@@ -348,6 +349,7 @@ const PomodoroTimer = () => {
           typeOfStudy={typeOfStudy}
           setStart={setStart}
           setTotalDuration={setTotalDuration}
+          selectedSubject={selectedSubject}
         />
       )}
     </>

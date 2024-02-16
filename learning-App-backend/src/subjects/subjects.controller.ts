@@ -1,4 +1,3 @@
-
 import admin from "../config/firebase-config"
 import { NextFunction, Request, Response} from 'express';
 import * as subjectsService from "./subjects.service"
@@ -11,11 +10,11 @@ import * as subjectsService from "./subjects.service"
 
 
 async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunction) {
-    
+
         const idToken = req.headers.authorization?.split("Bearer ")[1];
-        
+
         if(idToken){
-            
+
             try{
                 const decodedToken = await admin.auth().verifyIdToken(idToken);
                 req.user = decodedToken;
@@ -23,7 +22,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
                     next();
                 }else{
                     console.log("token not decoded")
-                } 
+                }
             }catch(error){
                 console.error(error);
                 res.status(500).json({error: "Internal Server Error"})
@@ -33,7 +32,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
         }
     }
     async function addSubject(req:AuthenticateRequest, res:Response){
-        const userId = req.user?.uid 
+        const userId = req.user?.uid
         if(!userId){
             res.status(401).json({error:"Unathorized user"})
             return;
@@ -54,7 +53,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
             }else{
                 res.status(409).json({error: "The subject already exists"})
             }
-            
+
         }catch(error){
             console.error(error)
         }
@@ -64,7 +63,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
     }
     async function getSub(req:AuthenticateRequest, res:Response){
         console.log("we are inside of the getSub function backend")
-        const userId = req.user?.uid 
+        const userId = req.user?.uid
         if(!userId){
             res.status(401).json({error:"Unathorized user"})
             return;
@@ -80,5 +79,31 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
             }
         }
     }
+    async function getSubjectId(req:AuthenticateRequest, res:Response){
+        const userId = req.user?.uid
+        const theSubjectName = req.params.subject_name
 
-    module.exports = {created:[getIdToken, addSubject], list:[getIdToken, getSub]};
+        if(!userId){
+            res.status(401).json({error:"Unathorized user"})
+            return
+        }
+        else{
+            try{
+                console.log("in the try section of getSubjectID")
+                console.log("this is the subject name from the backend", theSubjectName)
+                const subjectId = await subjectsService.retrieveSubId(userId, theSubjectName)
+                console.log("this is the subjectId that we get from DATABASE", subjectId)
+                console.log("*************************",subjectId.subject_id)
+                res.json({data: await subjectId.subject_id})
+            }catch(error){
+                console.error(error)
+                res.status(401).json({error:"Unable to get subject id"})
+            }
+        }
+    }
+
+    module.exports = {
+        created:[getIdToken, addSubject],
+        list:[getIdToken, getSub],
+        getId:[getIdToken, getSubjectId]};
+

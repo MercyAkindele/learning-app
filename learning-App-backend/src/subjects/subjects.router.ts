@@ -5,4 +5,9 @@ router
     .route("/subject")
     .post(controller.created)
     .get(controller.list)
-module.exports = router; 
+
+router
+    .route("/subject/:subject_name")
+    .get(controller.getId)
+module.exports = router;
+

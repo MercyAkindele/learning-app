@@ -23,8 +23,6 @@ const initialContext:UserContext = {
     signUp: async (email: string, password: string) =>{},
     logIn: async (email:string, password: string) => {},
     logOut: async () => {},
-    
-    
 }
 
 type AuthUserContextProviderProps = {
@@ -37,7 +35,6 @@ export default function useFirebaseAuth(){
     const [authUser, setAuthUser] = useState<AuthUser|null>(null);
     const [ isLoading, setIsLoading] = useState<boolean>(true);
     const navigate = useNavigate();
-    
 
     const authStateChanged = async (user:User|null) =>{
         setIsLoading(true);
@@ -46,9 +43,10 @@ export default function useFirebaseAuth(){
             setIsLoading(false);
             return
         }
-       
+
         setAuthUser({uid:user.uid,email:user.email, displayName:user.displayName,photoUrl:user.photoURL});
         setIsLoading(false);
+        console.log('on auth state changed');
     }
 
     const signUp = async (email:string, password:string)=>{
@@ -59,12 +57,12 @@ export default function useFirebaseAuth(){
             throw error;
         }
     }
-  
+
     const logIn = async (email:string, password:string) =>{
         try{
             await signInWithEmailAndPassword(auth, email, password)
             navigate("/dashboard")
-            
+
         }catch (error){
             throw error;
         }
@@ -85,10 +83,8 @@ export default function useFirebaseAuth(){
         return () => unsubscribe()
     },[])
 
-
     return {authUser, isLoading, signUp, logIn, logOut}
 }
-
 
 export function AuthUserProvider({children}:AuthUserContextProviderProps){
     const auth = useFirebaseAuth();

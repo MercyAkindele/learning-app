@@ -1,3 +1,4 @@
+
 const API_BASE_URL = import.meta.env.VITE_APP_REACT_APP_API_BASE_URL || "http://localhost:8080";
 const headers = new Headers();
 headers.append("Content-Type", "application/json")
@@ -36,7 +37,7 @@ export async function sendSubjectForValidation(token:string, data:any){
         headers.set("Authorization", `Bearer ${token}`)
     }
     const options:Options = {
-        headers, 
+        headers,
         method:"POST",
         body: JSON.stringify({data})
     }
@@ -50,8 +51,47 @@ export async function getSubjects(token:string){
         headers.set("Authorization", `Bearer ${token}`)
     }
     const options:Options = {
-        headers, 
+        headers,
         method:"GET",
     }
     return await fetchJson(url, options, null);
+}
+export async function getASubjectId(token:string, subjectName:string){
+    console.log("We are trying to do api call to get subject id")
+    const url = new URL(`${API_BASE_URL}/api/subject/${subjectName}`);
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options = {
+        headers,
+        method:"GET",
+    }
+    return await fetchJson(url, options, null);
+}
+
+export async function saveNotes(token:string, data:{}){
+    console.log("we are inside api function called saveNotes")
+    const url = new URL(`${API_BASE_URL}/api/notes`)
+
+
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options = {
+        headers,
+        method:"POST",
+        body:JSON.stringify({data})
+    }
+    return await fetchJson(url, options, null)
+}
+export async function getNotes(token:string){
+    const url = new URL(`${API_BASE_URL}/api/notes`)
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options ={
+        headers,
+        method:"GET"
+    }
+    return await fetchJson(url, options, null)
 }
