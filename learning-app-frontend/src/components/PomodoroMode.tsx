@@ -1,15 +1,7 @@
-
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {auth} from "../firebase/firebase"
+import { auth } from "../firebase/firebase";
 import { useAuth } from "../firebase/auth";
 import { getASubjectId } from "../utils/api";
 import Notes from "./Notes";
@@ -24,7 +16,8 @@ type PomodoroModeProps = {
   typeOfStudy: string;
   setStart: React.Dispatch<React.SetStateAction<boolean>>;
   setTotalDuration: React.Dispatch<React.SetStateAction<number>>;
-  selectedSubject:string;
+  selectedSubject: string;
+  subjectIdentification: number | undefined;
 };
 
 const PomodoroMode = ({
@@ -37,40 +30,33 @@ const PomodoroMode = ({
   typeOfStudy,
   setStart,
   setTotalDuration,
-  selectedSubject
+  selectedSubject,
+  subjectIdentification,
 }: PomodoroModeProps) => {
-
   let originalStudyIncrement = studyIncrements;
-  const [subjectId, setSubjectId] = useState<number|null>(null);
+  const [subjectId, setSubjectId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const {authUser} = useAuth();
-  const user = auth.currentUser
-  const userId = authUser?.uid
-  useEffect(()=>{
-    console.log("inside the useEffect in Pomodoro mode")
-    const getSubjectIdByName = async ()=>{
+  const { authUser } = useAuth();
+  const user = auth.currentUser;
+  const userId = authUser?.uid;
+  // useEffect(()=>{
+  //   const getSubjectIdByName = async ()=>{
+  //       if(user){
+  //         try{
+  //           const userIdToken = await user?.getIdToken()
+  //           let actualSubjectId = await getASubjectId(userIdToken, selectedSubject)
+  //           setSubjectId(actualSubjectId)
 
-        console.log("inside try catch of pomodoro mode")
-        if(user){
-          console.log("there is a user in pomodoro mode")
-          try{
-            console.log("this is the selected subject inside of pomodoro mode", selectedSubject)
-            const userIdToken = await user?.getIdToken()
-            let actualSubjectId = await getASubjectId(userIdToken, selectedSubject)
-            console.log("this is the subjectId obtained from the backend", actualSubjectId)
-            console.log("this should be just a number", actualSubjectId)
-            setSubjectId(actualSubjectId)
-            console.log("this is the actual subject Id", actualSubjectId)
-          }catch(error){
-            console.error
-          }
-        }
-        console.log("there is no documented user inside of pomodoro mode")
-      }
-      getSubjectIdByName();
-    }
+  //         }catch(error){
+  //           console.error
+  //         }
+  //       }
+  //       console.log("there is no documented user inside of pomodoro mode")
+  //     }
+  //     getSubjectIdByName();
+  //   }
 
-  ,[selectedSubject, userId])
+  // ,[selectedSubject, userId])
 
   const handleCountDownPause = () => {
     if (timerRunning) {
@@ -96,9 +82,11 @@ const PomodoroMode = ({
   return (
     <Container maxWidth="sm">
       <Box>
-        <Typography>{selectedSubject?`${selectedSubject} Notes`:"Notes"}</Typography>
-        <Grid container spacing={2} sx={{marginTop:"4%"}}>
-          <Grid  sx={{margin:"4%"}}>
+        <Typography>
+          {selectedSubject ? `${selectedSubject} Notes` : "Notes"}
+        </Typography>
+        <Grid container spacing={2} sx={{ marginTop: "4%" }}>
+          <Grid sx={{ margin: "4%" }}>
             <Paper
               elevation={2}
               sx={{
@@ -109,7 +97,6 @@ const PomodoroMode = ({
                 marginTop: "4%",
                 alignItems: "center",
                 marginRight: "4%",
-
               }}
             >
               {typeOfStudy === "study" ? (
@@ -125,23 +112,20 @@ const PomodoroMode = ({
           </Grid>
         </Grid>
         <Grid>
-            <Paper
-              elevation={2}
-              sx={{
-                height:160,
-                lineHeight:"80px",
-                marginTop:"4%",
-              }}
-            >
-              <Notes subjectId={subjectId}/>
-
-            </Paper>
-          </Grid>
-
+          <Paper
+            elevation={2}
+            sx={{
+              height: 160,
+              lineHeight: "80px",
+              marginTop: "4%",
+            }}
+          >
+            <Notes subjectIdentification={subjectIdentification} />
+          </Paper>
+        </Grid>
       </Box>
     </Container>
   );
 };
 
 export default PomodoroMode;
-

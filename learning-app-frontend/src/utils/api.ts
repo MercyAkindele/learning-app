@@ -84,8 +84,8 @@ export async function saveNotes(token:string, data:{}){
     }
     return await fetchJson(url, options, null)
 }
-export async function getNotes(token:string){
-    const url = new URL(`${API_BASE_URL}/api/notes`)
+export async function getNotes(token:string, subjectId:number|undefined){
+    const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}`)
     if(token){
         headers.set("Authorization", `Bearer ${token}`)
     }

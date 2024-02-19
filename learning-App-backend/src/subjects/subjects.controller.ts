@@ -58,7 +58,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
             console.error(error)
         }
        }else if(theSubject.length === 0 && userId){
-        res.status(401).json({error: "A subject is needed"})
+        res.status(400).json({error: "A subject is needed"})
        }
     }
     async function getSub(req:AuthenticateRequest, res:Response){
@@ -97,7 +97,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
                 res.json({data: await subjectId.subject_id})
             }catch(error){
                 console.error(error)
-                res.status(401).json({error:"Unable to get subject id"})
+                res.status(404).json({error:"Unable to get subject id"})
             }
         }
     }
