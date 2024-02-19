@@ -1,10 +1,8 @@
-import express, {Express} from "express";
+import express, { Express } from "express";
 const router = require("express").Router();
-const controller = require("./notes.controller")
+const controller = require("./notes.controller");
 
-router
-    .route("/notes")
-    .post(controller.create)
+router.route("/notes").post(controller.create);
 
-
+router.route("/notes/:subjectId").get(controller.list);
 module.exports = router;
