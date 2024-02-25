@@ -9,8 +9,13 @@
 				"DavidAnson.vscode-markdownlint",
 				"ms-azuretools.vscode-docker",
 				"esbenp.prettier-vscode",
-				"dsznajder.es7-react-js-snippets"
+				"dsznajder.es7-react-js-snippets",
+				"hediet.vscode-drawio"
 			]
 		}
-	}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	},
+	"remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" }
 }
