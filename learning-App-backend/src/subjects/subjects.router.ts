@@ -4,6 +4,7 @@ const controller = require("./subjects.controller")
 router
     .route("/subject")
     .post(controller.created)
+    // .post(controller.checkSub)
     .get(controller.list)
 
 router

@@ -30,7 +30,19 @@ const fetchJson = async (url:URL, options:Options, onCancel:AbortSignal|null):Pr
     }
 }
 
-
+export async function checkIfWeCanPomodoro(token:string, data:any){
+    console.log("about to do the checks ")
+    const url = new URL(`${API_BASE_URL}/api/pomodoro`);
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options = {
+        headers,
+        method:"POST",
+        body: JSON.stringify({data})
+    }
+    return await fetchJson(url,options,null)
+}
 export async function sendSubjectForValidation(token:string, data:any){
     const url = new URL(`${API_BASE_URL}/api/subject`);
     if(token){

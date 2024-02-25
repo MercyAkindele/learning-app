@@ -18,14 +18,15 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { useState, useEffect } from "react";
 import PomodoroMode from "./PomodoroMode";
 import Navigation from "./Navigation";
-import { getSubjects } from "../utils/api";
+import { getSubjects, checkIfWeCanPomodoro } from "../utils/api";
 import { auth } from "../firebase/firebase";
 import { useAuth } from "../firebase/auth";
 
 type typeAlertType =
   | "durationError"
   | "studyIncrementError"
-  | "studyGreaterThanDuration";
+  | "studyGreaterThanDuration"
+  | "noSubject"
 
 const PomodoroTimer = () => {
   type InitialInterval = {
@@ -87,6 +88,7 @@ const PomodoroTimer = () => {
   }, [userId]);
 
   useEffect(() => {
+    console.log("this is the subject : ", selectedSubject)
     if (timerRunning) {
       const studyInterval = setInterval(() => {
         if (
@@ -149,44 +151,75 @@ const PomodoroTimer = () => {
     }
   }, [timerRunning, totalDuration, typeOfStudy, studyIncrements, breaks]);
 
-  const handleCountDown = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCountDown = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("inside of the handle countdown section frontend")
+    console.log("this is the selected subject: ", selectedSubject)
 
-    if (Math.floor(studyIncrements / 25) !== 1) {
-      console.log("In the study break determination box");
-      setBreaks(Math.floor(studyIncrements / 25) + 5);
-    }
-    const initialStudyIncrements = studyIncrements;
-    const initialBreakIncrements = breaks;
-    setInitialIntervals({
-      studyInt: initialStudyIncrements,
-      breakInt: initialBreakIncrements,
-    });
-    if (studyIncrements < 25) {
-      setStart(false);
-      setTimerRunning(false);
-      setAlertType("studyIncrementError");
-    }
-    if (studyIncrements > totalDuration) {
-      setStart(false);
-      setTimerRunning(false);
-      setAlertType("studyGreaterThanDuration");
-    } else if (
-      !(
-        studyIncrements < 25 ||
-        totalDuration < 25 ||
-        studyIncrements > totalDuration
-      )
-    ) {
-      setAlertType(null);
-      setStart(true);
-      setTypeOfStudy("study");
-      const element = document.documentElement;
-      element.requestFullscreen();
-      if (!timerRunning) {
-        setTimerRunning(true);
+    try{
+      if(auth.currentUser){
+        const userIdToken = await auth.currentUser.getIdToken();
+        let checks = await checkIfWeCanPomodoro(userIdToken, {selectedSubject, studyIncrements, totalDuration})
+        console.log("this is checks: ", checks)
+          setAlertType(null);
+          setStart(true);
+          setTypeOfStudy("study");
+          const element = document.documentElement;
+          element.requestFullscreen();
+          if (Math.floor(studyIncrements / 25) !== 1) {
+            console.log("In the study break determination box");
+            setBreaks(Math.floor(studyIncrements / 25) + 5);
+          }
+          const initialStudyIncrements = studyIncrements;
+          const initialBreakIncrements = breaks;
+          setInitialIntervals({
+            studyInt: initialStudyIncrements,
+            breakInt: initialBreakIncrements,
+          });
+          if (!timerRunning) {
+            setTimerRunning(true);
+          }
+
       }
+    }catch(error){
+      setStart(false)
+      setTimerRunning(false)
+      console.log("this is the error: ", error)
+      let pomodoroErrors:any = error;
+      setAlertType(pomodoroErrors.message)
     }
+
+    // if (studyIncrements < 25) {
+    //   setStart(false);
+    //   setTimerRunning(false);
+    //   setAlertType("studyIncrementError");
+    // }
+    // if (studyIncrements > totalDuration) {
+    //   setStart(false);
+    //   setTimerRunning(false);
+    //   setAlertType("studyGreaterThanDuration");
+    // }
+    // if(selectedSubject === ""){
+    //   setStart(false);
+    //   setTimerRunning(false);
+
+    // }
+    // if (
+    //   !(
+    //     studyIncrements < 25 ||
+    //     totalDuration < 25 ||
+    //     studyIncrements > totalDuration
+    //   )
+    // ) {
+    //   setAlertType(null);
+    //   setStart(true);
+    //   setTypeOfStudy("study");
+    //   const element = document.documentElement;
+    //   element.requestFullscreen();
+    //   if (!timerRunning) {
+    //     setTimerRunning(true);
+    //   }
+    // }
   };
   const setSubNameAndId = (e: SelectChangeEvent<string>) => {
     setSelectedSubject(e.target.value);
@@ -219,6 +252,7 @@ const PomodoroTimer = () => {
                   id="choose-subject"
                   value={selectedSubject}
                   onChange={setSubNameAndId}
+                  // required
                   input={<OutlinedInput label="Name" />}
                 >
                   {subjectNames.map((subject: any) => (
@@ -231,6 +265,14 @@ const PomodoroTimer = () => {
                   ))}
                 </Select>
               </FormControl>
+              {alertType === "noSubject" && (
+                <Alert severity="info">
+                  A subject is needed to run Pomodoro Mode. —{" "}
+                  <strong>
+                    Please choose a subject, or create a subject in the create subject page!
+                  </strong>
+                </Alert>
+                )}
 
               {/* <TextField
                 id="create-new-subject"
@@ -373,7 +415,7 @@ const PomodoroTimer = () => {
           </Card>
         )}
       </Container>
-      {start && (
+      {start && selectedSubject !== "" &&(
         <PomodoroMode
           timerRunning={timerRunning}
           setTimerRunning={setTimerRunning}
