@@ -12,17 +12,13 @@ const {
   DATABASE_URL_DEVELOPMENT="postgresql://postgres@localhost/postgres",
 } = process.env;
 
-// console.log("DATABASE_URL",DATABASE_URL)
-// console.log("DATABASE_URL_DEVELOPMENT",DATABASE_URL_DEVELOPMENT)
-// console.log("process.env", process.env)
-
 const config: Record<string, Knex.Config> = {
 
   development: {
     client: 'postgresql',
     connection: DATABASE_URL_DEVELOPMENT,
     pool:{
-      min: 1, 
+      min: 1,
       max: 5
     },
     migrations:{

@@ -54,7 +54,7 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  
+
 
   return authUser !== null ? (
     <Box sx={{ flexGrow: 1}}>
@@ -80,7 +80,7 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
           <Button onClick={handlePomodoroClick}>
             <Avatar variant="square" sx={{borderRadius:1, backgroundColor:"white"}}>
               <AvTimerIcon sx={{color:"purple"}}/>
-             
+
             </Avatar>
           </Button>
           <Button onClick={handleProfileClick}>

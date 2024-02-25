@@ -61,6 +61,17 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
         res.status(400).json({error: "A subject is needed"})
        }
     }
+    // async function aSubjectHasBeenChosen(req:AuthenticateRequest, res:Response, next:NextFunction){
+    //     const userId = req.user?.uid
+    //     const {data} = req.body
+    //     if(userId){
+    //         if(data === undefined || data === null){
+    //             res.status(400).json({error:"Must have a subject to proceed"})
+    //         }else{
+    //             next();
+    //         }
+    //     }
+    // }
     async function getSub(req:AuthenticateRequest, res:Response){
         console.log("we are inside of the getSub function backend")
         const userId = req.user?.uid
@@ -105,5 +116,7 @@ async function getIdToken(req:AuthenticateRequest, res: Response, next:NextFunct
     module.exports = {
         created:[getIdToken, addSubject],
         list:[getIdToken, getSub],
-        getId:[getIdToken, getSubjectId]};
+        getId:[getIdToken, getSubjectId],
+        // checkSub:[getIdToken, aSubjectHasBeenChosen ]
+    };
 
