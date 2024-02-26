@@ -1,6 +1,6 @@
 import { useAuth } from "../firebase/auth";
 import { Avatar, Box, Typography, Grid, Button, Paper } from "@mui/material";
-import { auth } from "../firebase/firebase";
+// import { auth } from "../firebase/firebase";
 import Navigation from "./Navigation";
 
 const UserProfile = () => {

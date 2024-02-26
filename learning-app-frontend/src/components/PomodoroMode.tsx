@@ -1,9 +1,9 @@
 import { Box, Container, Grid, Button, Paper, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase";
-import { useAuth } from "../firebase/auth";
-import { getASubjectId } from "../utils/api";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { auth } from "../firebase/firebase";
+// import { useAuth } from "../firebase/auth";
+// import { getASubjectId } from "../utils/api";
 import Notes from "./Notes";
 
 type PomodoroModeProps = {
@@ -33,12 +33,12 @@ const PomodoroMode = ({
   selectedSubject,
   subjectIdentification,
 }: PomodoroModeProps) => {
-  let originalStudyIncrement = studyIncrements;
-  const [subjectId, setSubjectId] = useState<number | null>(null);
-  const navigate = useNavigate();
-  const { authUser } = useAuth();
-  const user = auth.currentUser;
-  const userId = authUser?.uid;
+  // const originalStudyIncrement = studyIncrements;
+  // const [subjectId, setSubjectId] = useState<number | null>(null);
+  // const navigate = useNavigate();
+  // const { authUser } = useAuth();
+  // const user = auth.currentUser;
+  // const userId = authUser?.uid;
   // useEffect(()=>{
   //   const getSubjectIdByName = async ()=>{
   //       if(user){

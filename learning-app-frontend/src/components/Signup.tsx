@@ -12,9 +12,9 @@ const Signup = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
-  
 
-  
+
+
   const handleSignUp = async (e:FormEvent<HTMLFormElement>) =>{
   e.preventDefault();
   console.log("this is the email", email)
@@ -28,17 +28,17 @@ const Signup = () => {
     await signUp(email, password);
     navigate("/login")
   }catch (error){
-    throw error
+    // throw error set error state so that I can display it in the ui
   }
 }
-  
+
   return (
     <Container maxWidth="sm">
       <Box sx={{marginTop:8, display:"flex", flexDirection:"column", alignItems:"center"}}>
         <Typography>Sign Up</Typography>
         <Link to="/login">Have an account already? Log In</Link>
         <Box component="form" onSubmit={handleSignUp} sx={{display:"flex", flexDirection:"column"}}>
-          <TextField 
+          <TextField
             type="email"
             id="email"
             name="email"
@@ -47,7 +47,7 @@ const Signup = () => {
             onChange={(e)=> setEmail(e.target.value)}
             sx={{marginTop:4}}
           />
-          <TextField 
+          <TextField
             type="password"
             id="password"
             name="password"
@@ -56,7 +56,7 @@ const Signup = () => {
             onChange={(e)=> setPassword(e.target.value)}
             sx={{marginTop:2}}
           />
-          <TextField 
+          <TextField
             type="password"
             id="confirm-password"
             name="confirm-password"

@@ -7,7 +7,6 @@ import {
   MenuItem,
   Select,
   Typography,
-  TextField,
   Paper,
   Box,
   OutlinedInput,
@@ -28,6 +27,7 @@ type typeAlertType =
   | "studyGreaterThanDuration"
   | "noSubject"
 
+
 const PomodoroTimer = () => {
   type InitialInterval = {
     studyInt: number;
@@ -38,13 +38,13 @@ const PomodoroTimer = () => {
     subject_id: number;
   };
 
-  let audio = new Audio("src/assets/music/Background music DOWNLOAD (135).wav");
+  // const audio = new Audio("src/assets/music/Background music DOWNLOAD (135).wav");
 
   const [timerRunning, setTimerRunning] = useState<boolean>(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>();
   const [start, setStart] = useState<boolean>(false);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
-  const [selectedMusic, setSelectedMusic] = useState<string>("");
+  // const [selectedMusic, setSelectedMusic] = useState<string>("");
   // measured in seconds
   const [totalDuration, setTotalDuration] = useState<number>(0);
   // measured in seconds
@@ -54,14 +54,14 @@ const PomodoroTimer = () => {
   const [typeOfStudy, setTypeOfStudy] = useState<TheStudyType | string>("");
   const [initialIntervals, setInitialIntervals] =
     useState<InitialInterval | null>(null);
-  const [alertType, setAlertType] = useState<typeAlertType | null>();
+  const [alertType, setAlertType] = useState<typeAlertType | null|string>();
   const [subjectNames, setSubjectNames] = useState<SubjectType[] | []>([]);
   const [subjectIdentification, setSubjectIdentification] = useState<
     number | undefined
   >();
   const title = "Pomodoro";
 
-  let { authUser } = useAuth();
+  const { authUser } = useAuth();
   const userId = authUser?.uid;
 
   type TheStudyType = "study" | "studyBreak";
@@ -70,9 +70,9 @@ const PomodoroTimer = () => {
     const getListOfSubjects = async () => {
       if (auth.currentUser) {
         try {
-          let userIdToken = await auth.currentUser?.getIdToken();
+          const userIdToken = await auth.currentUser?.getIdToken();
           // console.log("this is the userIDtOKEN", userIdToken)
-          let subjectNamesFromDataBase = await getSubjects(userIdToken);
+          const subjectNamesFromDataBase = await getSubjects(userIdToken);
           setSubjectNames(subjectNamesFromDataBase);
           console.log(
             "this is the subjectNames from the database",
@@ -156,10 +156,11 @@ const PomodoroTimer = () => {
     console.log("inside of the handle countdown section frontend")
     console.log("this is the selected subject: ", selectedSubject)
 
+
     try{
       if(auth.currentUser){
         const userIdToken = await auth.currentUser.getIdToken();
-        let checks = await checkIfWeCanPomodoro(userIdToken, {selectedSubject, studyIncrements, totalDuration})
+        const checks = await checkIfWeCanPomodoro(userIdToken, {selectedSubject, studyIncrements, totalDuration})
         console.log("this is checks: ", checks)
           setAlertType(null);
           setStart(true);
@@ -181,13 +182,17 @@ const PomodoroTimer = () => {
           }
 
       }
-    }catch(error){
+    }catch(error:unknown){
       setStart(false)
       setTimerRunning(false)
-      console.log("this is the error: ", error)
-      let pomodoroErrors:any = error;
-      setAlertType(pomodoroErrors.message)
+      if(error instanceof Error){
+        console.error(error)
+        setAlertType(error.message)
+      }else{
+        setAlertType(null)
+      }
     }
+  }
 
     // if (studyIncrements < 25) {
     //   setStart(false);
@@ -220,10 +225,10 @@ const PomodoroTimer = () => {
     //     setTimerRunning(true);
     //   }
     // }
-  };
+
   const setSubNameAndId = (e: SelectChangeEvent<string>) => {
     setSelectedSubject(e.target.value);
-    let subNameToFindId = subjectNames.find((subject) => {
+    const subNameToFindId = subjectNames.find((subject) => {
       return subject.subject_name === e.target.value;
     });
     console.log("this is the subject id", subNameToFindId?.subject_id);
@@ -255,7 +260,7 @@ const PomodoroTimer = () => {
                   // required
                   input={<OutlinedInput label="Name" />}
                 >
-                  {subjectNames.map((subject: any) => (
+                  {subjectNames.map((subject: SubjectType) => (
                     <MenuItem
                       key={subject.subject_name}
                       value={subject.subject_name}

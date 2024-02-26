@@ -20,8 +20,8 @@ type UserContext = {
 const initialContext:UserContext = {
     authUser:null,
     isLoading:true,
-    signUp: async (email: string, password: string) =>{},
-    logIn: async (email:string, password: string) => {},
+    signUp: async () =>{},
+    logIn: async () => {},
     logOut: async () => {},
 }
 
@@ -51,10 +51,10 @@ export default function useFirebaseAuth(){
 
     const signUp = async (email:string, password:string)=>{
         try{
-          let createdUser= await createUserWithEmailAndPassword(auth, email, password)
+          const createdUser= await createUserWithEmailAndPassword(auth, email, password)
           await updateProfile(createdUser.user,{displayName:createdUser.user.email?.split("@")[0]})
         }catch (error){
-            throw error;
+            //throw error;
         }
     }
 
@@ -64,7 +64,7 @@ export default function useFirebaseAuth(){
             navigate("/dashboard")
 
         }catch (error){
-            throw error;
+            //throw error;
         }
     }
 
@@ -74,7 +74,7 @@ export default function useFirebaseAuth(){
             console.log("you have logged out")
             navigate("/");
         }catch (error){
-            throw error
+            //throw error
         }
     }
 
@@ -89,5 +89,5 @@ export default function useFirebaseAuth(){
 export function AuthUserProvider({children}:AuthUserContextProviderProps){
     const auth = useFirebaseAuth();
     return <AuthUserContext.Provider value={auth}>{children}</AuthUserContext.Provider>;
-};
+}
 export const useAuth = () => useContext(AuthUserContext)

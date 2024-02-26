@@ -10,15 +10,16 @@ const CreateSubject = () => {
     const navigate = useNavigate();
     const [subject, setSubject] = useState<string>("")
     const [alertType, setAlertType] = useState("");
-  
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         try{
-            if(subject.length === 0){ 
+            if(subject.length === 0){
                 throw new Error("A subject is needed")
             }
         }
-        catch(error:any){
+        catch(error:unknown){
+            if(error instanceof Error)
             if(error.message){
                 setAlertType(error.message)
             }
@@ -29,8 +30,9 @@ const CreateSubject = () => {
                 const userIdToken = await auth.currentUser.getIdToken()
                 await sendSubjectForValidation(userIdToken, subject)
                 navigate("/pomodoro")
-            }catch(error:any){
-                console.log("this is the error message: ", error)
+            }catch(error:unknown){
+                if(error instanceof Error)
+                // console.log("this is the error message: ", error)
                 if(error.message){
                     setAlertType(error.message)
                 }
@@ -38,7 +40,7 @@ const CreateSubject = () => {
                 throw error;
             }
         }
-        
+
 
     }
   return(
@@ -51,15 +53,15 @@ const CreateSubject = () => {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-               
+
             }}
             data-testid="your-form"
             >
-              
+
               {alertType.length > 0 && <Alert severity="error" sx={{mt:"2%"}}>
                 {alertType} — <strong>Please enter a subject!</strong>
               </Alert>}
-              
+
                 <TextField
                     id="subject"
                     type="text"
@@ -71,7 +73,7 @@ const CreateSubject = () => {
                     sx={{mt:"4%"}}
                 />
                 <Button type="submit" variant="contained" sx={{mt:2}} disabled={subject.trim().length === 0}> Create Subject</Button>
-                
+
             </Box>
     </Container>
     </>

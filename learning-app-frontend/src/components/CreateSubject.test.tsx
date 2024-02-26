@@ -2,9 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter as Router } from "react-router-dom";
 import CreateSubject from "./CreateSubject";
-import { auth } from "../firebase/firebase";
-import { sendSubjectForValidation,  getSubjects  } from "../utils/api";
-import { getIdToken } from "firebase/auth";
+import { sendSubjectForValidation } from "../utils/api";
+
 
 describe("CreateSubject", () => {
   let container: HTMLElement | null;
@@ -68,7 +67,7 @@ describe("CreateSubject", () => {
         <CreateSubject />
       </Router>
     );
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     expect(inputField).toHaveValue("");
   });
 
@@ -78,9 +77,9 @@ describe("CreateSubject", () => {
         <CreateSubject />
       </Router>
     );
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     await userEvent.type(inputField, "Hello");
-    let buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     expect(buttonEl).toBeEnabled();
   });
 
@@ -90,7 +89,7 @@ describe("CreateSubject", () => {
         <CreateSubject />
       </Router>
     );
-    let buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     expect(buttonEl).toBeDisabled();
   });
   it("Should have disabled Create Subject Button if the input is just empty spaces", async () => {
@@ -99,9 +98,9 @@ describe("CreateSubject", () => {
         <CreateSubject />
       </Router>
     );
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     await userEvent.type(inputField, "    ");
-    let buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     expect(buttonEl).toBeDisabled();
   });
   // Check to see if input element work when typing
@@ -111,14 +110,14 @@ describe("CreateSubject", () => {
         <CreateSubject />
       </Router>
     );
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     await userEvent.type(inputField, "Hello");
     expect(inputField).toHaveValue("Hello");
   });
 
   //Check to see if submission works for valid input
   it("Should submit when Create Subject Button is clicked with valid input ", async () => {
-  
+
     vi.mock('../utils/api', () => ({
       sendSubjectForValidation: vi.fn(),
     }));
@@ -131,27 +130,25 @@ describe("CreateSubject", () => {
         },
         isLoading: false,
         signUp: async () => {
-          email: 'test@test.com';
-          password: 'password';
+
         },
         logIn: async () => {
-          email: 'test@test.com';
-          password: 'password';
+
         },
         logOut: async () => {},
       },
     }));
-   
-    
+
+
     render(
       <Router>
         <CreateSubject />
       </Router>
     );
 
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     await userEvent.type(inputField, '  Hello   ');
-    let buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     await userEvent.click(buttonEl);
 
     await waitFor(() => {
@@ -159,7 +156,7 @@ describe("CreateSubject", () => {
     });
   });
    it("Should submit when Create Subject Button is clicked with valid input ", async () => {
-  
+
     vi.mock('../utils/api', () => ({
       sendSubjectForValidation: vi.fn(),
     }));
@@ -172,27 +169,25 @@ describe("CreateSubject", () => {
         },
         isLoading: false,
         signUp: async () => {
-          email: 'test@test.com';
-          password: 'password';
+
         },
         logIn: async () => {
-          email: 'test@test.com';
-          password: 'password';
+
         },
         logOut: async () => {},
       },
     }));
-   
-    
+
+
     render(
       <Router>
         <CreateSubject />
       </Router>
     );
 
-    let inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
     await userEvent.type(inputField, '  Hello   ');
-    let buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     await userEvent.click(buttonEl);
 
     await waitFor(() => {
