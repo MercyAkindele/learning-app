@@ -5,6 +5,9 @@ import { sendSubjectForValidation} from '../utils/api'
 import { useNavigate } from 'react-router-dom'
 import Navigation from './Navigation'
 
+type AlertError = {
+    message:string
+}
 
 const CreateSubject = () => {
     const navigate = useNavigate();
@@ -31,14 +34,24 @@ const CreateSubject = () => {
                 await sendSubjectForValidation(userIdToken, subject)
                 navigate("/pomodoro")
             }catch(error:unknown){
-                if(error instanceof Error)
-                // console.log("this is the error message: ", error)
-                if(error.message){
+                if(error instanceof Error){
+                    console.error(error)
+                    setAlertType(error.message)
+                }
+
+                if(isAlertError(error)){
                     setAlertType(error.message)
                 }
                 console.error(error)
-                throw error;
+
             }
+        }
+        function isAlertError(obj:unknown):obj is AlertError{
+            if(typeof obj !== "object"|| obj === null){
+                return false
+            }
+            const {message} = obj as AlertError
+            return typeof message === "string"
         }
 
 

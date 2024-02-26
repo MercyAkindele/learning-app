@@ -37,6 +37,9 @@ const PomodoroTimer = () => {
     subject_name: string;
     subject_id: number;
   };
+  type AlertErrors={
+      message:string,
+  }
 
   // const audio = new Audio("src/assets/music/Background music DOWNLOAD (135).wav");
 
@@ -54,7 +57,7 @@ const PomodoroTimer = () => {
   const [typeOfStudy, setTypeOfStudy] = useState<TheStudyType | string>("");
   const [initialIntervals, setInitialIntervals] =
     useState<InitialInterval | null>(null);
-  const [alertType, setAlertType] = useState<typeAlertType | null|string>();
+  const [alertType, setAlertType] = useState<typeAlertType | null|string|AlertErrors>();
   const [subjectNames, setSubjectNames] = useState<SubjectType[] | []>([]);
   const [subjectIdentification, setSubjectIdentification] = useState<
     number | undefined
@@ -182,15 +185,42 @@ const PomodoroTimer = () => {
           }
 
       }
-    }catch(error:unknown){
-      setStart(false)
-      setTimerRunning(false)
-      if(error instanceof Error){
-        console.error(error)
-        setAlertType(error.message)
-      }else{
-        setAlertType(null)
+    }
+    // }catch(error:object){
+    //   setStart(false)
+    //   setTimerRunning(false)
+    //   if(error){
+    //     console.error("this is the error.message if error is an instance of error: ", error)
+    //     setAlertType(error.message)
+    //   }else if(typeof error === typeof "AlertErrors"){
+    //     console.log("this is the error if it is a string: ", error)
+    //     if(error)setAlertType(error.message)
+    //   }else{
+    //     console.log("this is the error if it is unknown: ", error)
+    //     setAlertType(null)
+    //   }
+    // }
+    catch (error: unknown) {
+      setStart(false);
+      setTimerRunning(false);
+      if (error instanceof Error) {
+        console.error("Error instance:", error);
+        setAlertType(error.message);
+      } else if (isAlertError(error)) {
+        console.log("AlertErrors instance:", error);
+        setAlertType(error.message);
+      } else {
+        console.log("Unknown error:", error);
+        setAlertType(null);
       }
+    }
+
+    function isAlertError(obj: unknown): obj is AlertErrors {
+      if (typeof obj !== 'object' || obj === null) {
+        return false;
+      }
+      const { message } = obj as AlertErrors;
+      return typeof message === 'string';
     }
   }
 
