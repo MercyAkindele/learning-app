@@ -31,8 +31,12 @@ const fetchJson = async (url:URL, options:Options, onCancel:AbortSignal|null):Pr
         return Promise.resolve(onCancel)
     }
 }
-
-export async function checkIfWeCanPomodoro(token:string, data:object){
+type CheckIfWeCanPomodoroDataType = {
+    selectedSubject:string,
+     studyIncrements:number,
+     totalDuration:number
+}
+export async function checkIfWeCanPomodoro(token:string, data:CheckIfWeCanPomodoroDataType){
     console.log("about to do the checks ")
     const url = new URL(`${API_BASE_URL}/api/pomodoro`);
     if(token){
@@ -82,8 +86,11 @@ export async function getASubjectId(token:string, subjectName:string){
     }
     return await fetchJson(url, options, null);
 }
-
-export async function saveNotes(token:string, data:object){
+type SaveNotesDataType = {
+    subjectIdentification:number|undefined,
+    note:string,
+  }
+export async function saveNotes(token:string, data:SaveNotesDataType){
     console.log("we are inside api function called saveNotes")
     const url = new URL(`${API_BASE_URL}/api/notes`)
 
@@ -109,7 +116,10 @@ export async function getNotes(token:string, subjectId:number|undefined){
     }
     return await fetchJson(url, options, null)
 }
-export async function editNote(token:string, subjectId:number|undefined, data:object){
+type EditNoteDataType = {
+    note:string
+}
+export async function editNote(token:string, subjectId:number|undefined, data:EditNoteDataType){
     console.log("we are inside api function called saveNotes")
     const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}`)
 
