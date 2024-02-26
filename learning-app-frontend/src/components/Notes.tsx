@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAuth } from "../firebase/auth";
 import { auth } from "../firebase/firebase";
-import { saveNotes, getNotes } from "../utils/api";
+import { saveNotes, getNotes, editNote } from "../utils/api";
 
 type NotesProps = {
   subjectIdentification: number | undefined;
@@ -40,7 +40,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
       if (auth.currentUser) {
         try {
           const userIdToken = await auth.currentUser?.getIdToken();
-          let getTheNotes = await getNotes(userIdToken, subjectIdentification);
+          const getTheNotes = await getNotes(userIdToken, subjectIdentification);
           console.log(
             "this is the notes retreived from the database: ",
             getTheNotes
@@ -60,23 +60,30 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
     if (auth.currentUser) {
       try {
         const userIdToken = await auth.currentUser.getIdToken();
-
-        let savingNotes = await saveNotes(userIdToken, {
-          subjectIdentification,
-          note,
-        });
-        setListOfNotes(previous => [...previous, {note_content:note, notes_id:savingNotes.notes_id}])
-        setNote("")
+        if(!isEdited){
+          const savingNotes = await saveNotes(userIdToken, {
+            subjectIdentification,
+            note,
+          });
+          console.log(
+            "this is what comes back when trying to save the notes: ",
+            savingNotes
+          );
+          setListOfNotes(previous => [...previous, {note_content:note, notes_id:savingNotes.notes_id}])
+          setNote("")
+        }else if(isEdited){
+          const editTheNote = await editNote(userIdToken, subjectIdentification, {note})
+          console.log(editTheNote)
+        }
         setCliked(!clicked);
-        console.log(
-          "this is what comes back when trying to save the notes: ",
-          savingNotes
-        );
       } catch (error) {
         console.error(error);
       }
     }
   };
+  const handleEdit = async () =>{
+    setIsEdited(true)
+  }
   return (
     <Container>
       <Box component="form" onSubmit={addNotesHandler}>
@@ -103,7 +110,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
                     <Typography >
                       {item.note_content}
                     </Typography>
-                    <Button>Edit</Button>
+                    <Button onClick={handleEdit}>Edit</Button>
                     <Button>Delete</Button>
                   </ListItem>
                 </>

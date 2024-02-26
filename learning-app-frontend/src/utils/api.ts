@@ -2,7 +2,7 @@
 const API_BASE_URL = import.meta.env.VITE_APP_REACT_APP_API_BASE_URL || "http://localhost:8080";
 const headers = new Headers();
 headers.append("Content-Type", "application/json")
-let data:any;
+//let data:any;
 type Options = {
     headers:Headers,
     signal?:AbortSignal|null,
@@ -10,6 +10,7 @@ type Options = {
     body?:string,
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fetchJson = async (url:URL, options:Options, onCancel:AbortSignal|null):Promise<any>=>{
     try{
         const response = await fetch(url, options)
@@ -21,7 +22,8 @@ const fetchJson = async (url:URL, options:Options, onCancel:AbortSignal|null):Pr
             return Promise.reject({message:payload.error})
         }
         return payload.data
-    }catch(error:any){
+    }catch(error:unknown){
+        if(error instanceof Error)
         if(error.name !== "AbortError"){
             console.error(error.stack)
             throw error
@@ -30,7 +32,7 @@ const fetchJson = async (url:URL, options:Options, onCancel:AbortSignal|null):Pr
     }
 }
 
-export async function checkIfWeCanPomodoro(token:string, data:any){
+export async function checkIfWeCanPomodoro(token:string, data:object){
     console.log("about to do the checks ")
     const url = new URL(`${API_BASE_URL}/api/pomodoro`);
     if(token){
@@ -43,7 +45,7 @@ export async function checkIfWeCanPomodoro(token:string, data:any){
     }
     return await fetchJson(url,options,null)
 }
-export async function sendSubjectForValidation(token:string, data:any){
+export async function sendSubjectForValidation(token:string, data:string){
     const url = new URL(`${API_BASE_URL}/api/subject`);
     if(token){
         headers.set("Authorization", `Bearer ${token}`)
@@ -81,7 +83,7 @@ export async function getASubjectId(token:string, subjectName:string){
     return await fetchJson(url, options, null);
 }
 
-export async function saveNotes(token:string, data:{}){
+export async function saveNotes(token:string, data:object){
     console.log("we are inside api function called saveNotes")
     const url = new URL(`${API_BASE_URL}/api/notes`)
 
@@ -104,6 +106,20 @@ export async function getNotes(token:string, subjectId:number|undefined){
     const options:Options ={
         headers,
         method:"GET"
+    }
+    return await fetchJson(url, options, null)
+}
+export async function editNote(token:string, subjectId:number|undefined, data:object){
+    console.log("we are inside api function called saveNotes")
+    const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}`)
+
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options = {
+        headers,
+        method:"Patch",
+        body:JSON.stringify({data})
     }
     return await fetchJson(url, options, null)
 }

@@ -23,11 +23,11 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let emailInput = e.target.value;
+    const emailInput = e.target.value;
     setEmailAddress(emailInput);
-  
+
   };
- 
+
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     try{
@@ -63,7 +63,7 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-          
+
             <TextField
               error
               id="email"
@@ -74,7 +74,7 @@ const Login = () => {
               value={emailAddress}
               onChange ={handleEmailChange}
             />
-          
+
           <TextField
             sx={{ marginTop: 2, marginBottom: 2 }}
             type="password"
