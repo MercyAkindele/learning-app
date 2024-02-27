@@ -117,10 +117,11 @@ export async function getNotes(token:string, subjectId:number|undefined){
     return await fetchJson(url, options, null)
 }
 type EditNoteDataType = {
-    note:string
+    note:string,
+    noteId:number
 }
 export async function editNote(token:string, subjectId:number|undefined, data:EditNoteDataType){
-    console.log("we are inside api function called saveNotes")
+    console.log("we are inside api function called editNote")
     const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}`)
 
     if(token){
@@ -128,7 +129,7 @@ export async function editNote(token:string, subjectId:number|undefined, data:Ed
     }
     const options:Options = {
         headers,
-        method:"Patch",
+        method:"PUT",
         body:JSON.stringify({data})
     }
     return await fetchJson(url, options, null)

@@ -19,3 +19,10 @@ export async function getListOfNotes(
     .select("note_content", "notes_id")
     .where({ user_id: userId, subject_id: subjectId });
 }
+export async function editTheOriginalNote(userId:string|undefined, subject_id:number, notes_id:number,note_content:string){
+ return knex("notes")
+  .select("*")
+  .where({user_id:userId, subject_id, notes_id})
+  .update({notes_id, user_id:userId, note_content, subject_id}, "*")
+  .then((upNote)=> upNote[0])
+}
