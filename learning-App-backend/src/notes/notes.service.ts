@@ -26,3 +26,9 @@ export async function editTheOriginalNote(userId:string|undefined, subject_id:nu
   .update({notes_id, user_id:userId, note_content, subject_id}, "*")
   .then((upNote)=> upNote[0])
 }
+export async function deleteSelectedNote(userId:string|undefined,subject_id:number, noteId:number){
+  return knex("notes")
+  .select("*")
+  .where({user_id:userId, subject_id, notes_id:noteId})
+  .del()
+}
