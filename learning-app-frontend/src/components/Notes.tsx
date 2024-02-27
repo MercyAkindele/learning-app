@@ -23,6 +23,7 @@ type NoteContent = {
 const Notes = ({ subjectIdentification }: NotesProps) => {
   const { authUser } = useAuth();
   const [note, setNote] = useState("");
+  const [noteId, setNoteId] = useState(0)
   const [listOfNotes, setListOfNotes] = useState<NoteContent[]>([]);
   const [isEdited, setIsEdited] = useState(false);
   const [clicked, setCliked] = useState(false);
@@ -72,8 +73,14 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
           setListOfNotes(previous => [...previous, {note_content:note, notes_id:savingNotes.notes_id}])
           setNote("")
         }else if(isEdited){
-          const editTheNote = await editNote(userIdToken, subjectIdentification, {note})
-          console.log(editTheNote)
+
+          console.log("inside edit frontend")
+          console.log("this is the note now: ", note)
+          const editTheNote = await editNote(userIdToken, subjectIdentification, {note, noteId})
+          console.log("this is what comes back from editTheNote frontend: ",editTheNote)
+          setListOfNotes(previous => [...previous, {note_content:note, notes_id:noteId}])
+          setNote("")
+          setIsEdited(false)
         }
         setCliked(!clicked);
       } catch (error) {
@@ -81,8 +88,10 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
       }
     }
   };
-  const handleEdit = async () =>{
+  const handleEdit = (noteNum:number, noteContent:string) =>{
     setIsEdited(true)
+    setNoteId(noteNum)
+    setNote(noteContent)
   }
   return (
     <Container>
@@ -92,7 +101,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
           label="Add your note"
           value={note}
           onChange={(e) => {
-            setNote(e.target.value);
+            setNote(e.target.value)
           }}
         />
         <Button variant="contained" type="submit">
@@ -110,7 +119,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
                     <Typography >
                       {item.note_content}
                     </Typography>
-                    <Button onClick={handleEdit}>Edit</Button>
+                    <Button onClick={()=> handleEdit(item.notes_id, item.note_content)}>Edit</Button>
                     <Button>Delete</Button>
                   </ListItem>
                 </>

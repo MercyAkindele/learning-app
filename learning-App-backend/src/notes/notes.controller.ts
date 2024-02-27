@@ -1,6 +1,6 @@
 import admin from "../config/firebase-config";
 import { NextFunction, Request, Response } from "express";
-import { addNote, getListOfNotes } from "./notes.service";
+import { addNote, getListOfNotes, editTheOriginalNote } from "./notes.service";
 
 interface AuthenticateRequest extends Request {
   user?: admin.auth.DecodedIdToken;
@@ -72,7 +72,34 @@ async function listOfNotes(req: AuthenticateRequest, res: Response) {
     res.status(404).json({ error: "Unable to get the list of notes" });
   }
 }
+
+async function editANote(req:AuthenticateRequest, res:Response){
+  const userId=req.user?.uid;
+  const subjectId = Number(req.params.subjectId)
+  const {note} = req.body.data as { note: string }
+  const noteId= Number(req.body.data.noteId)
+  console.log("this is the new note in the backend: ", note)
+  console.log("this is the noteid in the backend: ", noteId)
+  console.log("this is req.params from edit note backend: ", subjectId)
+
+  if(!userId){
+    res.status(404).json({ error: "User id not found." });
+    return;
+  } else{
+    console.log("the user has been found")
+    if(note === undefined && note !== null){
+      res.status(404).json({error: "In order to edit, you must have a new note"})
+    }
+    else if(subjectId){
+      const updatedNote = await editTheOriginalNote(userId, subjectId, noteId, note)
+      console.log("this is updtedNote: ", updatedNote)
+      res.status(201).json({data: updatedNote})
+    }
+
+  }
+}
 module.exports = {
   create: [getIdToken, addANote],
   list: [getIdToken, listOfNotes],
+  edit:[getIdToken,editANote]
 };
