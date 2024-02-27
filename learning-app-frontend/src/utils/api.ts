@@ -1,4 +1,5 @@
 
+
 const API_BASE_URL = import.meta.env.VITE_APP_REACT_APP_API_BASE_URL || "http://localhost:8080";
 const headers = new Headers();
 headers.append("Content-Type", "application/json")
@@ -133,4 +134,18 @@ export async function editNote(token:string, subjectId:number|undefined, data:Ed
         body:JSON.stringify({data})
     }
     return await fetchJson(url, options, null)
+}
+
+export async function deleteNote(token:string, subjectId:number|undefined, notesId:number){
+    console.log("this is data in the api file: ", notesId)
+    const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}/${notesId}`)
+    if(token){
+        headers.set("Authorization", `Bearer ${token}`)
+    }
+    const options:Options={
+        headers,
+        method:"DELETE",
+
+    }
+    return await fetchJson(url,options,null)
 }

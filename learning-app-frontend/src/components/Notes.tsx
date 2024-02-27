@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useAuth } from "../firebase/auth";
 import { auth } from "../firebase/firebase";
-import { saveNotes, getNotes, editNote } from "../utils/api";
+import { saveNotes, getNotes, editNote, deleteNote} from "../utils/api";
 
 type NotesProps = {
   subjectIdentification: number | undefined;
@@ -20,6 +20,7 @@ type NoteContent = {
   note_content: string;
   notes_id: number;
 };
+
 const Notes = ({ subjectIdentification }: NotesProps) => {
   const { authUser } = useAuth();
   const [note, setNote] = useState("");
@@ -88,10 +89,24 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
       }
     }
   };
-  const handleEdit = (noteNum:number, noteContent:string) =>{
+  const handleEdit = (noteIdentification:number, noteContent:string) =>{
     setIsEdited(true)
-    setNoteId(noteNum)
+    setNoteId(noteIdentification)
     setNote(noteContent)
+  }
+  const handleDeleteNote = async (noteIdentification:number) =>{
+    console.log("this is noteidentification in the frontend: ", noteIdentification)
+    const newList = listOfNotes.filter((note) => note.notes_id !== noteIdentification)
+    console.log("this is new list: ", newList)
+    if(auth.currentUser){
+      try{
+        const userIdToken = await auth.currentUser.getIdToken()
+        await deleteNote(userIdToken, subjectIdentification,noteIdentification)
+        setListOfNotes(newList)
+      }catch(error){
+        console.error(error)
+      }
+    }
   }
   return (
     <Container>
@@ -120,7 +135,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
                       {item.note_content}
                     </Typography>
                     <Button onClick={()=> handleEdit(item.notes_id, item.note_content)}>Edit</Button>
-                    <Button>Delete</Button>
+                    <Button onClick={()=> handleDeleteNote(item.notes_id)}>Delete</Button>
                   </ListItem>
                 </>
               );
