@@ -11,6 +11,7 @@ describe("CreateSubject", () => {
   beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
+    // vi.resetAllMocks()
   });
 
   afterEach(() => {
@@ -18,7 +19,7 @@ describe("CreateSubject", () => {
       document.body.removeChild(container);
       container = null;
     }
-    vi.restoreAllMocks()
+    // vi.restoreAllMocks()
   });
 
 
