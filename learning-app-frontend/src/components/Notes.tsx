@@ -154,10 +154,10 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
         </Button>
       </Box>
       <Box>
-        <List>
+        <List data-testid="notes1">
           {listOfNotes &&
             listOfNotes.map((item) => (
-              <ListItem key={item.notes_id} data-testid="individual-notes">
+              <ListItem key={item.notes_id} data-testid={`note-${item.notes_id}`}>
                 <Checkbox />
                 <Typography>{item.note_content}</Typography>
                 <Button
