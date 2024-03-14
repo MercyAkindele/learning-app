@@ -34,6 +34,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   }, []);
   //map through list of notes and then setListOFNotes to [...] and to the new note.
   //subjectId starts out as null during the first useEffect cycle because you havent chosen a subject yet
+
   useEffect(() => {
     const renderListOfNotes = async () => {
       console.log(
@@ -157,7 +158,10 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
         <List data-testid="notes1">
           {listOfNotes &&
             listOfNotes.map((item) => (
-              <ListItem key={item.notes_id} data-testid={`note-${item.notes_id}`}>
+              <ListItem
+                key={item.notes_id}
+                data-testid={`note-${item.notes_id}`}
+              >
                 <Checkbox />
                 <Typography>{item.note_content}</Typography>
                 <Button
