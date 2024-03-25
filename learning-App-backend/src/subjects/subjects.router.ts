@@ -1,14 +1,11 @@
-import express, {Express} from "express";
+import express, { Express } from "express";
 const router = require("express").Router();
-const controller = require("./subjects.controller")
+const controller = require("./subjects.controller");
 router
-    .route("/subject")
-    .post(controller.created)
-    // .post(controller.checkSub)
-    .get(controller.list)
+  .route("/subject")
+  .post(controller.created)
+  // .post(controller.checkSub)
+  .get(controller.list);
 
-router
-    .route("/subject/:subject_name")
-    .get(controller.getId)
+router.route("/subject/:subject_name").get(controller.getId);
 module.exports = router;
-

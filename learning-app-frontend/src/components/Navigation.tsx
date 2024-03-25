@@ -31,17 +31,16 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
   const { logOut } = useAuth();
   const navigate = useNavigate();
 
-  const handlePomodoroClick = () =>{
-    navigate("/pomodoro")
-  }
+  const handlePomodoroClick = () => {
+    navigate("/pomodoro");
+  };
 
   const handleProfileClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("This is the display name", authUser?.displayName);
     setAnchorEl(e.currentTarget);
   };
-  const handleSubjectCreation = () =>{
-    navigate("/createsubject")
-  }
+  const handleSubjectCreation = () => {
+    navigate("/createsubject");
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -49,24 +48,27 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
     await logOut();
   };
   const handleProfile = () => {
-    navigate(`/${authUser?.displayName}`)
-  }
+    navigate(`/${authUser?.displayName}`);
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-
   return authUser !== null ? (
-    <Box sx={{ flexGrow: 1}}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton>
             <MenuIcon />
           </IconButton>
-          <Avatar onClick={()=>navigate("/dashboard")}>
+          <Avatar onClick={() => navigate("/dashboard")}>
             <LocalLibraryIcon />
           </Avatar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginLeft:2,}}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, marginLeft: 2 }}
+          >
             {title}
           </Typography>
           <TextField
@@ -78,14 +80,16 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
             size="small"
           />
           <Button onClick={handlePomodoroClick}>
-            <Avatar variant="square" sx={{borderRadius:1, backgroundColor:"white"}}>
-              <AvTimerIcon sx={{color:"purple"}}/>
-
+            <Avatar
+              variant="square"
+              sx={{ borderRadius: 1, backgroundColor: "white" }}
+            >
+              <AvTimerIcon sx={{ color: "purple" }} />
             </Avatar>
           </Button>
           <Button onClick={handleProfileClick}>
-            <Avatar sx={{backgroundColor:"white"}}>
-              <Person2Icon sx={{color:"purple"}}/>
+            <Avatar sx={{ backgroundColor: "white" }}>
+              <Person2Icon sx={{ color: "purple" }} />
             </Avatar>
           </Button>
           <Popover
@@ -103,11 +107,20 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
             }}
           >
             <Paper sx={{ width: 400, maxWidth: "100%" }}>
-              <Box sx={{display:"flex", paddingTop:"2px", paddingLeft:"2px", alignItems:"center"}}>
-                <Avatar >
+              <Box
+                sx={{
+                  display: "flex",
+                  paddingTop: "2px",
+                  paddingLeft: "2px",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar>
                   <Person2Icon />
                 </Avatar>
-                <Typography sx={{paddingLeft:"2px"}}>{authUser?.displayName?.toUpperCase()}</Typography>
+                <Typography sx={{ paddingLeft: "2px" }}>
+                  {authUser?.displayName?.toUpperCase()}
+                </Typography>
               </Box>
               <MenuList>
                 <MenuItem onClick={handleProfile}>
@@ -141,7 +154,11 @@ const Navigation = ({ title = "Learning App" }: NavigationProps) => {
           <Avatar>
             <LocalLibraryIcon />
           </Avatar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginLeft:2, }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, marginLeft: 2 }}
+          >
             {title}
           </Typography>
           <Button color="inherit">

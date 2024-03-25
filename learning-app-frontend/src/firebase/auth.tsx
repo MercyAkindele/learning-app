@@ -63,7 +63,6 @@ export default function useFirebaseAuth() {
       photoUrl: user.photoURL,
     });
     setIsLoading(false);
-    console.log("on auth state changed");
   };
 
   const signUp = async (email: string, password: string) => {
@@ -71,7 +70,7 @@ export default function useFirebaseAuth() {
       const createdUser = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       await updateProfile(createdUser.user, {
         displayName: createdUser.user.email?.split("@")[0],
@@ -86,17 +85,17 @@ export default function useFirebaseAuth() {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/dashboard");
     } catch (error) {
-      //throw error;
+      // throw error;
     }
   };
 
   const logOut = async () => {
     try {
       await signOut(auth);
-      console.log("you have logged out");
+
       navigate("/");
     } catch (error) {
-      //throw error
+      // throw error
     }
   };
 

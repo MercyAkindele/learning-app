@@ -17,7 +17,7 @@ export async function check(id: string, subject: Subject) {
   return knex("subject")
     .select("user_id", "subject_name")
     .whereExists(
-      knex.select("user_id").from("subject").whereRaw("user_id = ?", [id])
+      knex.select("user_id").from("subject").whereRaw("user_id = ?", [id]),
     )
     .andWhereRaw("LOWER(subject_name) = ?", [subject.sub.toLowerCase()]);
 }

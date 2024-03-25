@@ -29,30 +29,19 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   const [isEdited, setIsEdited] = useState(false);
   const [clicked, setCliked] = useState(false);
 
-  useEffect(() => {
-    console.log("subject id in empty useEffect", subjectIdentification);
-  }, []);
   //map through list of notes and then setListOFNotes to [...] and to the new note.
   //subjectId starts out as null during the first useEffect cycle because you havent chosen a subject yet
 
   useEffect(() => {
     const renderListOfNotes = async () => {
-      console.log(
-        "this is the subject ID in the renderListOfNotes function: ",
-        subjectIdentification
-      );
-
       if (auth.currentUser) {
         try {
           const userIdToken = await auth.currentUser?.getIdToken();
           const getTheNotes = await getNotes(
             userIdToken,
-            subjectIdentification
+            subjectIdentification,
           );
-          console.log(
-            "this is the notes retreived from the database: ",
-            getTheNotes
-          );
+
           setListOfNotes(getTheNotes);
         } catch (error) {
           console.error(error);
@@ -73,27 +62,19 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
             subjectIdentification,
             note,
           });
-          console.log(
-            "this is what comes back when trying to save the notes: ",
-            savingNotes
-          );
+
           setListOfNotes((previous) => [
             ...previous,
             { note_content: note, notes_id: savingNotes.notes_id },
           ]);
           setNote("");
         } else if (isEdited) {
-          console.log("inside edit frontend");
-          console.log("this is the note now: ", note);
           const editTheNote = await editNote(
             userIdToken,
             subjectIdentification,
-            { note, noteId }
+            { note, noteId },
           );
-          console.log(
-            "this is what comes back from editTheNote frontend: ",
-            editTheNote
-          );
+
           setListOfNotes((previous) => [
             ...previous,
             { note_content: note, notes_id: noteId },
@@ -115,21 +96,17 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   };
 
   const handleDeleteNote = async (noteIdentification: number) => {
-    console.log(
-      "this is noteidentification in the frontend: ",
-      noteIdentification
-    );
     const newList = listOfNotes.filter(
-      (note) => note.notes_id !== noteIdentification
+      (note) => note.notes_id !== noteIdentification,
     );
-    console.log("this is new list: ", newList);
+
     if (auth.currentUser) {
       try {
         const userIdToken = await auth.currentUser.getIdToken();
         await deleteNote(
           userIdToken,
           subjectIdentification,
-          noteIdentification
+          noteIdentification,
         );
         setListOfNotes(newList);
       } catch (error) {

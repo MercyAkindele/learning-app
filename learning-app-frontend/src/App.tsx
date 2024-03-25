@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <AuthUserProvider>
-        <AppRoutes/>
+        <AppRoutes />
       </AuthUserProvider>
     </>
   );

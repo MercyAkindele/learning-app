@@ -26,9 +26,9 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const buttonName = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonName = screen.getByRole("button", { name: /Create Subject/i });
     expect(buttonName).toBeVisible();
   });
 
@@ -36,16 +36,18 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    expect(screen.getByRole("textbox", {name:/Create a Subject/i})).toBeVisible();
+    expect(
+      screen.getByRole("textbox", { name: /Create a Subject/i }),
+    ).toBeVisible();
   });
 
   it("Should have the form on the page", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
     expect(screen.getByTestId("your-form")).toBeVisible();
   });
@@ -55,7 +57,7 @@ describe("CreateSubject", () => {
       render(
         <Router>
           <CreateSubject />
-        </Router>
+        </Router>,
       );
     }).not.toThrow();
   });
@@ -65,9 +67,11 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {
+      name: /Create a Subject/i,
+    });
     expect(inputField).toHaveValue("");
   });
 
@@ -75,11 +79,13 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {
+      name: /Create a Subject/i,
+    });
     await userEvent.type(inputField, "Hello");
-    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", { name: /Create Subject/i });
     expect(buttonEl).toBeEnabled();
   });
 
@@ -87,9 +93,9 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", { name: /Create Subject/i });
     expect(buttonEl).toBeDisabled();
   });
 
@@ -97,11 +103,13 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {
+      name: /Create a Subject/i,
+    });
     await userEvent.type(inputField, "    ");
-    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const buttonEl = screen.getByRole("button", { name: /Create Subject/i });
     expect(buttonEl).toBeDisabled();
   });
 
@@ -110,52 +118,52 @@ describe("CreateSubject", () => {
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
+    const inputField = screen.getByRole("textbox", {
+      name: /Create a Subject/i,
+    });
     await userEvent.type(inputField, "Hello");
     expect(inputField).toHaveValue("Hello");
   });
 
   //Check to see if submission works for valid input
   it("Should submit when Create Subject Button is clicked with valid input ", async () => {
-
-    vi.mock('../utils/api', () => ({
+    vi.mock("../utils/api", () => ({
       sendSubjectForValidation: vi.fn(),
     }));
-    vi.mock('../firebase/firebase', () => ({
+    vi.mock("../firebase/firebase", () => ({
       auth: {
         currentUser: {
-          uid: 'mercy',
-          email: 'test@test.com',
-          getIdToken: vi.fn(async ()=>"mockToken")
+          uid: "mercy",
+          email: "test@test.com",
+          getIdToken: vi.fn(async () => "mockToken"),
         },
         isLoading: false,
-        signUp: async () => {
-
-        },
-        logIn: async () => {
-
-        },
+        signUp: async () => {},
+        logIn: async () => {},
         logOut: async () => {},
       },
     }));
 
-
     render(
       <Router>
         <CreateSubject />
-      </Router>
+      </Router>,
     );
 
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
-    await userEvent.type(inputField, '  Hello   ');
-    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
+    const inputField = screen.getByRole("textbox", {
+      name: /Create a Subject/i,
+    });
+    await userEvent.type(inputField, "  Hello   ");
+    const buttonEl = screen.getByRole("button", { name: /Create Subject/i });
     await userEvent.click(buttonEl);
 
     await waitFor(() => {
-      expect(sendSubjectForValidation).toHaveBeenCalledWith('mockToken', '  Hello   ');
+      expect(sendSubjectForValidation).toHaveBeenCalledWith(
+        "mockToken",
+        "  Hello   ",
+      );
     });
   });
 });
-
