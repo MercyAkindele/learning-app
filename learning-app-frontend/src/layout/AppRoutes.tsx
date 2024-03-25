@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 import Login from "../components/Login";
 import Signup from "../components/Signup";
@@ -12,17 +11,17 @@ import CreateSubject from "../components/CreateSubject";
 // import Notes from "../components/Notes";
 
 const AppRoutes = () => {
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigation/>}/>
+        <Route path="/" element={<Navigation />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path={`/${authUser?.displayName}`} element={<UserProfile/>}/>
-        <Route path="/pomodoro" element={<PomodoroTimer/>}/>
-        <Route path="/createSubject" element={<CreateSubject/>}/>
+        <Route path={`/${authUser?.displayName}`} element={<UserProfile />} />
+        <Route path="/pomodoro" element={<PomodoroTimer />} />
+        <Route path="/createSubject" element={<CreateSubject />} />
         {/* <Route path="/notes" element={<Notes />}/> */}
 
         {/* <Route path="/signin" element={<SignIn/>}/> */}
@@ -32,4 +31,3 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
-

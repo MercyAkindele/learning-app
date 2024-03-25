@@ -62,7 +62,6 @@ const PomodoroMode = ({
     if (timerRunning) {
       setTimerRunning(false);
       clearInterval(intervalId);
-      console.log("time stopped");
     }
   };
   const handleCountDown = () => {

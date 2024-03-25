@@ -4,13 +4,13 @@ import Navigation from "./Navigation";
 // import PomodoroTimer from "./PomodoroTimer";
 
 const Dashboard = () => {
-   const title = "Dashboard";
+  const title = "Dashboard";
 
   return (
     <>
-      <Navigation title={title}/>
+      <Navigation title={title} />
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

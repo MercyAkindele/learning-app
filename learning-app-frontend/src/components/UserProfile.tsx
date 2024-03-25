@@ -132,16 +132,18 @@ const UserProfile = () => {
                 <Button>React.js Notes</Button>
               </Paper>
             </Grid>
-            <Typography sx={{marginTop:"4%"}}>0 Contributions this year</Typography>
+            <Typography sx={{ marginTop: "4%" }}>
+              0 Contributions this year
+            </Typography>
             <Grid container>
               <Grid xs={8} sx={{ marginTop: "2%" }}>
                 <Paper elevation={2}>
                   <Typography variant="h3">Calander will be here</Typography>
                 </Paper>
               </Grid>
-              <Grid xs={2} sx={{marginLeft:"15%", textAlign:"center"}}>
+              <Grid xs={2} sx={{ marginLeft: "15%", textAlign: "center" }}>
                 <Paper elevation={2}>
-                    <Typography>Year</Typography>
+                  <Typography>Year</Typography>
                 </Paper>
               </Grid>
             </Grid>

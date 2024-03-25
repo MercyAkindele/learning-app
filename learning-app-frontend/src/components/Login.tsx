@@ -11,11 +11,8 @@ import {
 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
-import {  useState } from "react";
-import { useAuth} from "../firebase/auth"
-
-
-
+import { useState } from "react";
+import { useAuth } from "../firebase/auth";
 
 const Login = () => {
   const { logIn } = useAuth();
@@ -25,20 +22,17 @@ const Login = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailInput = e.target.value;
     setEmailAddress(emailInput);
-
   };
 
-  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try{
-      await logIn(emailAddress, password)
-      console.log("you have signed in")
-    }catch (error){
-      console.error("there was a problem signing in", error)
-      throw error
+    try {
+      await logIn(emailAddress, password);
+    } catch (error) {
+      console.error("there was a problem signing in", error);
+      throw error;
     }
-
-  }
+  };
 
   return (
     <Container maxWidth="sm">
@@ -63,27 +57,26 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-
-            <TextField
-              error
-              id="email"
-              type="email"
-              label="Email"
-              autoComplete="email"
-              required
-              value={emailAddress}
-              onChange ={handleEmailChange}
-            />
+          <TextField
+            error
+            id="email"
+            type="email"
+            label="Email"
+            autoComplete="email"
+            required
+            value={emailAddress}
+            onChange={handleEmailChange}
+          />
 
           <TextField
             sx={{ marginTop: 2, marginBottom: 2 }}
             type="password"
             label="Password"
             required
-            onChange={(e) => setPassword(e.target.value) }
+            onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" id="remember-checkbox"/>}
+            control={<Checkbox value="remember" id="remember-checkbox" />}
             label="Remember me"
           />
           <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>

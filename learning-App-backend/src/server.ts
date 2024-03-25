@@ -1,7 +1,7 @@
 import app from "./app";
 import { Knex } from "knex";
 import knex from "./db/connection";
-const {PORT = 8080} = process.env;
+const { PORT = 8080 } = process.env;
 
 knex.migrate
   .latest()
@@ -9,7 +9,7 @@ knex.migrate
     console.log("migrations", migrations);
     app.listen(PORT, listener);
   })
-  .catch((error:Error) => {
+  .catch((error: Error) => {
     console.error(error);
     knex.destroy();
   });
