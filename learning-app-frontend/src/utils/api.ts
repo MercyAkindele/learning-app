@@ -14,7 +14,7 @@ type Options = {
 const fetchJson = async (
   url: URL,
   options: Options,
-  onCancel: AbortSignal | null
+  onCancel: AbortSignal | null,
 ): Promise<any> => {
   try {
     const response = await fetch(url, options);
@@ -44,7 +44,7 @@ type CheckIfWeCanPomodoroDataType = {
 
 export async function checkIfWeCanPomodoro(
   token: string,
-  data: CheckIfWeCanPomodoroDataType
+  data: CheckIfWeCanPomodoroDataType,
 ) {
   const url = new URL(`${API_BASE_URL}/api/pomodoro`);
   if (token) {
@@ -134,7 +134,7 @@ type EditNoteDataType = {
 export async function editNote(
   token: string,
   subjectId: number | undefined,
-  data: EditNoteDataType
+  data: EditNoteDataType,
 ) {
   const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}`);
 
@@ -152,7 +152,7 @@ export async function editNote(
 export async function deleteNote(
   token: string,
   subjectId: number | undefined,
-  notesId: number
+  notesId: number,
 ) {
   const url = new URL(`${API_BASE_URL}/api/notes/${subjectId}/${notesId}`);
   if (token) {

@@ -13,7 +13,7 @@ interface AuthenticateRequest extends Request {
 async function getIdToken(
   req: AuthenticateRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const idToken = req.headers.authorization?.split("Bearer ")[1];
 
@@ -89,7 +89,7 @@ async function editANote(req: AuthenticateRequest, res: Response) {
         userId,
         subjectId,
         noteId,
-        note
+        note,
       );
       res.status(201).json({ data: updatedNote });
     }

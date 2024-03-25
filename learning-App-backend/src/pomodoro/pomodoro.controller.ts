@@ -10,7 +10,7 @@ interface AuthenticateRequest extends Request {
 async function getIdToken(
   req: AuthenticateRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const idToken = req.headers.authorization?.split("Bearer ")[1];
 
@@ -33,7 +33,7 @@ async function getIdToken(
 async function isItAPomodoro(
   req: AuthenticateRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const userId = req.user?.uid;
 

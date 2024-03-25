@@ -70,7 +70,7 @@ export default function useFirebaseAuth() {
       const createdUser = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       await updateProfile(createdUser.user, {
         displayName: createdUser.user.email?.split("@")[0],

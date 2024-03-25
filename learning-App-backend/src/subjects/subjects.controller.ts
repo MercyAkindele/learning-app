@@ -9,7 +9,7 @@ interface AuthenticateRequest extends Request {
 async function getIdToken(
   req: AuthenticateRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const idToken = req.headers.authorization?.split("Bearer ")[1];
 
@@ -94,7 +94,7 @@ async function getSubjectId(req: AuthenticateRequest, res: Response) {
     try {
       const subjectId = await subjectsService.retrieveSubId(
         userId,
-        theSubjectName
+        theSubjectName,
       );
 
       res.json({ data: await subjectId.subject_id });

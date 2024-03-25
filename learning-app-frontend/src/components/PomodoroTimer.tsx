@@ -95,7 +95,7 @@ const PomodoroTimer = () => {
           typeOfStudy === "study"
         ) {
           setStudyIncrements(
-            (currentStudyIncrements) => currentStudyIncrements - 1
+            (currentStudyIncrements) => currentStudyIncrements - 1,
           );
           setTotalDuration((currentDuration) => currentDuration - 1);
         } else if (

@@ -39,7 +39,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
           const userIdToken = await auth.currentUser?.getIdToken();
           const getTheNotes = await getNotes(
             userIdToken,
-            subjectIdentification
+            subjectIdentification,
           );
 
           setListOfNotes(getTheNotes);
@@ -72,7 +72,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
           const editTheNote = await editNote(
             userIdToken,
             subjectIdentification,
-            { note, noteId }
+            { note, noteId },
           );
 
           setListOfNotes((previous) => [
@@ -97,7 +97,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
 
   const handleDeleteNote = async (noteIdentification: number) => {
     const newList = listOfNotes.filter(
-      (note) => note.notes_id !== noteIdentification
+      (note) => note.notes_id !== noteIdentification,
     );
 
     if (auth.currentUser) {
@@ -106,7 +106,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
         await deleteNote(
           userIdToken,
           subjectIdentification,
-          noteIdentification
+          noteIdentification,
         );
         setListOfNotes(newList);
       } catch (error) {

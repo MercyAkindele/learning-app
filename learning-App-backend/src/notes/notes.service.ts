@@ -2,7 +2,7 @@ import knex from "../db/connection";
 export async function addNote(
   userId: string | undefined,
   subject_id: any,
-  note_content: any
+  note_content: any,
 ) {
   return knex("notes").insert({
     user_id: userId,
@@ -12,7 +12,7 @@ export async function addNote(
 }
 export async function getListOfNotes(
   userId: string | undefined,
-  subjectId: number
+  subjectId: number,
 ) {
   return knex("notes")
     .select("note_content", "notes_id")
@@ -22,7 +22,7 @@ export async function editTheOriginalNote(
   userId: string | undefined,
   subject_id: number,
   notes_id: number,
-  note_content: string
+  note_content: string,
 ) {
   return knex("notes")
     .select("*")
@@ -33,7 +33,7 @@ export async function editTheOriginalNote(
 export async function deleteSelectedNote(
   userId: string | undefined,
   subject_id: number,
-  noteId: number
+  noteId: number,
 ) {
   return knex("notes")
     .select("*")
