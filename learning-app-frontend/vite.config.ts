@@ -12,6 +12,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTest.ts',
     css:true,
+    mockReset: true,
+    restoreMocks: true,
   },
   server: {
     host: true

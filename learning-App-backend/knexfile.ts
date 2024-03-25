@@ -8,8 +8,8 @@ import {Knex} from "knex";
 import path from "path";
 
 const {
-  DATABASE_URL="postgresql://postgres@localhost/postgres",
-  DATABASE_URL_DEVELOPMENT="postgresql://postgres@localhost/postgres",
+  DATABASE_URL="postgresql://postgres:postgres@database/postgres",
+  DATABASE_URL_DEVELOPMENT="postgresql://postgres:postgres@database/postgres",
 } = process.env;
 
 const config: Record<string, Knex.Config> = {

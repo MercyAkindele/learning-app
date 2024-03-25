@@ -4,13 +4,13 @@ import { MemoryRouter as Router } from "react-router-dom";
 import CreateSubject from "./CreateSubject";
 import { sendSubjectForValidation } from "../utils/api";
 
-
 describe("CreateSubject", () => {
   let container: HTMLElement | null;
 
   beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
+    // vi.resetAllMocks()
   });
 
   afterEach(() => {
@@ -18,9 +18,8 @@ describe("CreateSubject", () => {
       document.body.removeChild(container);
       container = null;
     }
-    vi.restoreAllMocks()
+    // vi.restoreAllMocks()
   });
-
 
   // Rendering on screen
   it("Should have Create Subject button", () => {
@@ -60,6 +59,7 @@ describe("CreateSubject", () => {
       );
     }).not.toThrow();
   });
+
   //Input and Button elements have default values
   it("Should have an empty input field at first", () => {
     render(
@@ -92,6 +92,7 @@ describe("CreateSubject", () => {
     const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     expect(buttonEl).toBeDisabled();
   });
+
   it("Should have disabled Create Subject Button if the input is just empty spaces", async () => {
     render(
       <Router>
@@ -103,6 +104,7 @@ describe("CreateSubject", () => {
     const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
     expect(buttonEl).toBeDisabled();
   });
+
   // Check to see if input element work when typing
   it("Should update the text in the input field when typing", async () => {
     render(
@@ -155,45 +157,5 @@ describe("CreateSubject", () => {
       expect(sendSubjectForValidation).toHaveBeenCalledWith('mockToken', '  Hello   ');
     });
   });
-   it("Should submit when Create Subject Button is clicked with valid input ", async () => {
-
-    vi.mock('../utils/api', () => ({
-      sendSubjectForValidation: vi.fn(),
-    }));
-    vi.mock('../firebase/firebase', () => ({
-      auth: {
-        currentUser: {
-          uid: 'mercy',
-          email: 'test@test.com',
-          getIdToken: vi.fn(async ()=>"mockToken")
-        },
-        isLoading: false,
-        signUp: async () => {
-
-        },
-        logIn: async () => {
-
-        },
-        logOut: async () => {},
-      },
-    }));
-
-
-    render(
-      <Router>
-        <CreateSubject />
-      </Router>
-    );
-
-    const inputField = screen.getByRole("textbox", {name:/Create a Subject/i});
-    await userEvent.type(inputField, '  Hello   ');
-    const buttonEl = screen.getByRole("button", {name:/Create Subject/i});
-    await userEvent.click(buttonEl);
-
-    await waitFor(() => {
-      expect(sendSubjectForValidation).toHaveBeenCalledWith('mockToken', '  Hello   ');
-    });
-  });
-
 });
 
