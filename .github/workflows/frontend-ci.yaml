@@ -2,7 +2,7 @@ name: Frontend CI
 
 on:
   push:
-    branches: [ "main", "US-10NotesTesting" ]
+    branches: [ "main" ]
     paths:
       - 'learning-app-frontend/**'
   pull_request:
