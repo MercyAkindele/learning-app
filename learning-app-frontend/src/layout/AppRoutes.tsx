@@ -8,6 +8,7 @@ import UserProfile from "../components/UserProfile";
 // import PomodoroMode from "../components/PomodoroMode";
 import PomodoroTimer from "../components/PomodoroTimer";
 import CreateSubject from "../components/CreateSubject";
+//import PomodoroMode from "../components/PomodoroMode";
 // import Notes from "../components/Notes";
 
 const AppRoutes = () => {
