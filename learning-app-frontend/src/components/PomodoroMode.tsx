@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Button, Paper, Typography } from "@mui/material";
 import Notes from "./Notes";
-import {useState, useEffect} from "react"
+import {useState, useEffect, useRef} from "react"
 
 type PomodoroModeProps = {
   studyIncrements: number;
@@ -31,33 +31,21 @@ type TheStudyType = "study" | "studyBreak";
 const [timerRunning, setTimerRunning] = useState(true);
 const [typeOfStudy, setTypeOfStudy] = useState<TheStudyType>("study");
 const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>();
-const [otherIntervalId,  setOtherIntervalId]= useState<NodeJS.Timeout|undefined>();
+const [secondsIntervalId,  setSecondsIntervalId]= useState<NodeJS.Timeout|undefined>();
 const [totalDur, setTotalDur] = useState(totalDuration - 1)
 const [totalDurSec, setTotalDurSec] = useState(59)
 const [studyInc, setStudyInc] = useState(studyIncrements - 1)
 const [breaks, setBreaks] = useState(5)
-
-useEffect(()=>{
-  if(timerRunning){
-    const secondsInterval = setInterval(()=>{
-      if(totalDurSec === 1){
-        setTotalDurSec(59)
-       }
-       if(totalDur > 0){
-         setTotalDurSec((current) => current - 1)
-       }
-     },1000)
-     setOtherIntervalId(secondsInterval);
-     clearInterval(otherIntervalId)
-      return () => {
-        clearInterval(secondsInterval);
-      };
-}},[totalDur, totalDurSec])
+const pauseTime = useRef<number|null>(null)
 
 
 useEffect(() => {
 
     if (timerRunning) {
+      const secondsInterval = setInterval(()=>{
+        setTotalDurSec((current)=> current === 0 ? 59:current-1)
+       },1000)
+
       const studyInterval = setInterval(() => {
         console.log("this is timerRunning", timerRunning)
 
@@ -101,21 +89,35 @@ useEffect(() => {
 
       }, 1000*60 );
       setIntervalId(studyInterval);
+      setSecondsIntervalId(secondsInterval)
       return () => {
+        clearInterval(secondsInterval)
         clearInterval(studyInterval);
       };
     }
-  }, [timerRunning, totalDur, typeOfStudy, studyInc, breaks]);
+  }, [timerRunning, totalDur, typeOfStudy, studyInc, breaks, studyIncrements, setStart]);
 
   const handleCountDownPause = () => {
     if (timerRunning) {
+      console.log("this is pauseRef time", pauseTime.current)
+      console.log("this is total duration seconds", totalDurSec)
+      console.log("this is total duration", totalDur)
       setTimerRunning(false);
       clearInterval(intervalId);
+      clearInterval(secondsIntervalId)
+      pauseTime.current = new Date().getTime()
     }
   };
   const handleCountDown = () => {
     if (!timerRunning) {
       setTimerRunning(true);
+      // const timeElapsed = pauseTime.current
+      // if(pauseTime.current !== null){
+      //   // const remainingSeconds = Math.max(totalDurSec - Math.floor(timeElapsed / 1000), 0);
+      //   // const remainingMinutes = Math.max(totalDur - Math.floor(( totalDurSec) / 60000), 0);
+      //   // setTotalDur(remainingMinutes);
+      // }
+
     }
   };
   const exitFullScreen = () => {

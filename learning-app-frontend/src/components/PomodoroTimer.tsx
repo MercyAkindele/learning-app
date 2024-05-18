@@ -127,6 +127,11 @@ const PomodoroTimer = () => {
   return (
     <>
       <Navigation title={title} />
+        <Alert severity="info">
+          Once you press start, the timer will be on, and you should study. If
+          you would like to take notes for that particular subject, there is an
+          area where you can take notes.
+        </Alert>
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         {!start && (
           <Card
