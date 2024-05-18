@@ -55,6 +55,10 @@ const CreateSubject = () => {
   return (
     <>
       <Navigation title={"Create Subject"} />
+      <Alert severity="info">
+          After creating a subject, then you can go to the pomodoro timer by
+          clicking the clock icon next to the avatar icon.
+        </Alert>
       <Container maxWidth="sm">
         <Box
           component="form"
