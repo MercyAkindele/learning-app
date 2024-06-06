@@ -71,6 +71,7 @@ async function listOfNotes(req: AuthenticateRequest, res: Response) {
 }
 
 async function editANote(req: AuthenticateRequest, res: Response) {
+  console.log("I am inside of edit Note")
   const userId = req.user?.uid;
   const subjectId = Number(req.params.subjectId);
   const { note } = req.body.data as { note: string };
