@@ -1,12 +1,12 @@
 import {
   TextField,
-  Container,
   Button,
   Checkbox,
   Typography,
   List,
   ListItem,
   Box,
+  Paper,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useAuth } from "../firebase/auth";
@@ -29,9 +29,6 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   const [isEdited, setIsEdited] = useState(false);
   const [clicked, setCliked] = useState(false);
 
-  //map through list of notes and then setListOFNotes to [...] and to the new note.
-  //subjectId starts out as null during the first useEffect cycle because you havent chosen a subject yet
-
   useEffect(() => {
     const renderListOfNotes = async () => {
       if (auth.currentUser) {
@@ -39,7 +36,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
           const userIdToken = await auth.currentUser?.getIdToken();
           const getTheNotes = await getNotes(
             userIdToken,
-            subjectIdentification,
+            subjectIdentification
           );
 
           setListOfNotes(getTheNotes);
@@ -49,7 +46,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
       }
     };
     renderListOfNotes();
-  }, [clicked, authUser?.uid, subjectIdentification]);
+  }, [clicked, authUser?.uid, subjectIdentification, isEdited]);
 
   const addNotesHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,7 +54,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
     if (auth.currentUser) {
       try {
         const userIdToken = await auth.currentUser.getIdToken();
-        if (!isEdited) {
+        if (isEdited === false) {
           const savingNotes = await saveNotes(userIdToken, {
             subjectIdentification,
             note,
@@ -68,17 +65,10 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
             { note_content: note, notes_id: savingNotes.notes_id },
           ]);
           setNote("");
-        } else if (isEdited) {
-          const editTheNote = await editNote(
-            userIdToken,
-            subjectIdentification,
-            { note, noteId },
-          );
+        } else if (isEdited === true) {
+          await editNote(userIdToken, subjectIdentification, { note, noteId });
 
-          setListOfNotes((previous) => [
-            ...previous,
-            { note_content: note, notes_id: noteId },
-          ]);
+          setListOfNotes((previous) => [...previous]);
           setNote("");
           setIsEdited(false);
         }
@@ -90,14 +80,17 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   };
 
   const handleEdit = (noteIdentification: number, noteContent: string) => {
+    console.log("this is note identification", noteIdentification);
+    console.log("this is the selected note content", noteContent);
     setIsEdited(true);
+    console.log("this is is edited", isEdited);
     setNoteId(noteIdentification);
     setNote(noteContent);
   };
 
   const handleDeleteNote = async (noteIdentification: number) => {
     const newList = listOfNotes.filter(
-      (note) => note.notes_id !== noteIdentification,
+      (note) => note.notes_id !== noteIdentification
     );
 
     if (auth.currentUser) {
@@ -106,7 +99,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
         await deleteNote(
           userIdToken,
           subjectIdentification,
-          noteIdentification,
+          noteIdentification
         );
         setListOfNotes(newList);
       } catch (error) {
@@ -116,7 +109,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
   };
 
   return (
-    <Container>
+    <Paper>
       <Box component="form" onSubmit={addNotesHandler}>
         <TextField
           variant="outlined"
@@ -139,8 +132,10 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
                 key={item.notes_id}
                 data-testid={`note-${item.notes_id}`}
               >
-                <Checkbox />
-                <Typography>{item.note_content}</Typography>
+                <Paper>
+                  <Checkbox />
+                  <Typography>{item.note_content}</Typography>
+                </Paper>
                 <Button
                   onClick={() => handleEdit(item.notes_id, item.note_content)}
                 >
@@ -153,7 +148,7 @@ const Notes = ({ subjectIdentification }: NotesProps) => {
             ))}
         </List>
       </Box>
-    </Container>
+    </Paper>
   );
 };
 

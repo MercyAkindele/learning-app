@@ -162,16 +162,7 @@ useEffect(() => {
           </Grid>
         </Grid>
         <Grid>
-          <Paper
-            elevation={2}
-            sx={{
-              height: 160,
-              lineHeight: "80px",
-              marginTop: "4%",
-            }}
-          >
-            <Notes subjectIdentification={subjectIdentification} />
-          </Paper>
+          <Notes subjectIdentification={subjectIdentification} />
         </Grid>
       </Box>
     </Container>
